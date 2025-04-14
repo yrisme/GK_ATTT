@@ -4,7 +4,6 @@
 #include <vector>
 #include <iostream>
 
-// --- Các bảng tiêu chuẩn của DES ---
 int initial_permutation[] = {
      58, 50, 42, 34, 26, 18, 10, 2,
      60, 52, 44, 36, 28, 20, 12, 4,
@@ -27,7 +26,6 @@ int final_permutation[] = {
      33, 1, 41,  9, 49, 17, 57, 25
 };
 
-// --- Một số hàm hỗ trợ ---
 std::bitset<64> string_to_bitset(const std::string& str) {
     std::bitset<64> bits;
     for (int i = 0; i < str.size(); ++i) {
@@ -59,22 +57,18 @@ std::bitset<64> permute(const std::bitset<64>& in, const int* table) {
     return out;
 }
 
-// --- Mã hoá khối 64-bit (đơn giản hoá, không đủ vòng DES chuẩn) ---
 std::bitset<64> des_block_encrypt(const std::bitset<64>& block, const std::bitset<64>& key) {
     std::bitset<64> permuted = permute(block, initial_permutation);
-    // ⚠ Giả lập mã hoá bằng XOR với key cho đơn giản (để dùng cho bài tập)
     std::bitset<64> encrypted = permuted ^ key;
     return permute(encrypted, final_permutation);
 }
 
-// --- Giải mã khối 64-bit (đối xứng với mã hoá) ---
 std::bitset<64> des_block_decrypt(const std::bitset<64>& block, const std::bitset<64>& key) {
     std::bitset<64> permuted = permute(block, initial_permutation);
     std::bitset<64> decrypted = permuted ^ key;
     return permute(decrypted, final_permutation);
 }
 
-// --- Mã hoá chuỗi đầu vào ---
 std::string des_encrypt(const std::string& plainText, const std::string& key) {
     std::string result;
     std::bitset<64> k = string_to_bitset(key.substr(0, 8));
@@ -88,7 +82,6 @@ std::string des_encrypt(const std::string& plainText, const std::string& key) {
     return result;
 }
 
-// --- Giải mã chuỗi đã mã hoá ---
 std::string des_decrypt(const std::string& cipherText, const std::string& key) {
     std::string result;
     std::bitset<64> k = string_to_bitset(key.substr(0, 8));
